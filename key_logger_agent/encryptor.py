@@ -5,22 +5,22 @@ class Encryptor:
     def __init__(self):
         self.key = "A"
 
-    def xor(self,data):
+    def xor(self,data:dict):
+
         def _xor(string):
             new_str = ''
             for i in string:
-                new_str += chr((ord(i) ^ ord(self.key)) + 65)
+                new_str += chr((ord(i) ^ ord(self.key)))
             return new_str
 
         encrypt_data = {}
-        for window_name, val in data.items():
-            new_window_name = _xor(window_name)
-            encrypt_data[new_window_name] = {}
-
-            for time_line, str_val in val.items():
-                new_time_line = _xor(time_line)
-                new_str_val = _xor(str_val)
-                encrypt_data[new_window_name][new_time_line] = new_str_val
+        for key, val in data.items():
+            new_key = _xor(key)
+            if isinstance(val,dict):
+                encrypt_data[new_key] = self.xor(val)
+            else:
+                new_val = _xor(val)
+                encrypt_data[new_key] = new_val
 
         return encrypt_data
 

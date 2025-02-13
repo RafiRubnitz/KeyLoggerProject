@@ -16,13 +16,14 @@ class SpecialKeys:
         string = self.rest_of_the_special_keys(string)
         return string
 
-    def replace_special_keys(self,string):
+    @staticmethod
+    def replace_special_keys(string):
         string = string.replace('~space~', ' ')
         string = string.replace('~tab~', '\t')
         string = string.replace('~enter~', '\n')
         return string
 
-    def rest_of_the_special_keys(self,string):
+    def rest_of_the_special_keys(self,string) -> str:
         pass
 
     def delete_key(self,string):

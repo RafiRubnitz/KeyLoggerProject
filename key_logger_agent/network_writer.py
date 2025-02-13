@@ -9,7 +9,9 @@ class NetworkWriter(Iwriter):
     def send_data(self,data):
         response = requests.post(self.urls[0],json=data)
         try:
-            print(response.json())
+            response = response.json()
+            if response["stop"]:
+                pass
         except:
             pass
         #בדיקה אם הצליח השליחה

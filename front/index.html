@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="index.css">
+    <title>keylogger front</title>
+</head>
+
+<body>
+    <button id = "get_data" onclick="get_data()"> get list of computers </button>
+
+    <pre id="list"> Empty list </pre>
+
+    <script>
+        function clickme() {
+            document.getElementById("text").style.color = "red"
+        }
+    </script>
+
+    <label for="computer_options"> computer options</label>
+    <select name="computer_list" id="computer_options">computers</select>
+    <button onclick="get_select_options()">show computer details</button>
+    <div id="result_container">
+        <pre id = "result"></pre>
+    </div>
+
+    <!-- <script>
+        function get_data() {
+            fetch("http://127.0.0.1:5000/api/get_machine_list")
+                .then(response => response.json())
+                .then(document.getElementById("computer list").innerHTML = response)
+        
+
+            // fetch('https://jsonplaceholder.typicode.com/todos/1')
+            //     .then(response => response.json())
+            //     .then(json => document.getElementById("computer list").innerHTML = json.userId)
+        }
+    </script> -->
+</body>
+
+</html>

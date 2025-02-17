@@ -1,9 +1,0 @@
-2025-02-16 11:14:11,835 - WARNING - stderr: Traceback (most recent call last):
-2025-02-16 11:14:11,835 - WARNING - stderr:   File "C:\Users\User\Desktop\жоп зешу\key_logger\key_logger_agent\keylogger_manager.py", line 64, in <module>
-2025-02-16 11:14:11,835 - WARNING - stderr:     key = KeyloggerManager()
-2025-02-16 11:14:11,836 - WARNING - stderr:           ^^^^^^^^^^^^^^^^^^
-2025-02-16 11:14:11,836 - WARNING - stderr:   File "C:\Users\User\Desktop\жоп зешу\key_logger\key_logger_agent\keylogger_manager.py", line 30, in __init__
-2025-02-16 11:14:11,836 - WARNING - stderr:     self.main()
-2025-02-16 11:14:11,837 - WARNING - stderr:   File "C:\Users\User\Desktop\жоп зешу\key_logger\key_logger_agent\keylogger_manager.py", line 35, in main
-2025-02-16 11:14:11,837 - WARNING - stderr:     time.sleep(3600)
-2025-02-16 11:14:11,837 - WARNING - stderr: KeyboardInterrupt

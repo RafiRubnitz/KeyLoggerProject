@@ -33,3 +33,13 @@ label {
     }
 }
 
+.tr_button {
+    direction: rtl;
+    button {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 16px;
+    }
+    select {
+        display: none;
+    }
+}

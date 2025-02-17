@@ -30,6 +30,31 @@ class App:
             computer_list.append(computer)
         return computer_list
 
+
+class Users:
+
+    def __init__(self):
+        self.users = {}
+        # self._load_users()
+
+    def verify_user(self,data):
+        if data["username"] in self.users:
+            if data["password"] == self.users[data["users"]]:
+                return True
+        return False
+
+    def check_if_user_exists(self,data):
+        pass
+
+    def add_user(self,data):
+        pass
+
+    def _load_users(self):
+        pass
+
+    def save_users(self):
+        pass
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -111,7 +136,35 @@ def get_data_from_DB():
 def get_data():
     pass
 
+
+@app.route('/user_verification',methods=['GET'])
+def user_verification():
+    #קבלת הנתונים שהמשתמש הכניס
+    data = request.get_json()
+
+    #בדיקת הנתונים מול המסד נתונים
+    answer = users.verify_user(data)
+
+    #החזרת תשובה
+    return jsonify({"message" : answer})
+
+@app.route('/create_user',methods=['POST'])
+def create_user():
+    #קבלת הנתונים מהמשתמש
+    data = request.get_json()
+
+    #בדיקה האם זה חוקי ואם קיים במערכת
+    users.check_if_user_exists(data)
+
+    #הכנסת המשתמש החדש למערכת
+    users.add_user(data)
+
+    #החזרת תשובה לפרונט
+    return  jsonify()
+
+
 if __name__ == '__main__':
     manager = App()
+    users = Users()
     app.run(debug=True,port=5000)
 

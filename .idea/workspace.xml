@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba2a1724-3823-4f3c-bcff-6ba41d132e90" name="Changes" comment="&quot;func xor change&quot;">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/special_keys.py" beforeDir="false" afterPath="$PROJECT_DIR$/front/special_keys.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/static/css/computer_information.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/static/css/computer_information.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/static/js/computer_information.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/static/js/computer_information.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/templates/computer_information.html" beforeDir="false" afterPath="$PROJECT_DIR$/front/templates/computer_information.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/key_logger_agent/keylogger_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/key_logger_agent/keylogger_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/key_logger_agent/keylogger_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/key_logger_agent/keylogger_service.py" afterDir="false" />
-    </list>
+    <list default="true" id="ba2a1724-3823-4f3c-bcff-6ba41d132e90" name="Changes" comment="&quot;func xor change&quot;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

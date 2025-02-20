@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba2a1724-3823-4f3c-bcff-6ba41d132e90" name="Changes" comment="&quot;func xor change&quot;">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/hacker image.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/home_page/home.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/home_page/home.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/home_page/home.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/home_page/users.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/new_html.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/study.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/backend/app.py" beforeDir="false" />
-    </list>
+    <list default="true" id="ba2a1724-3823-4f3c-bcff-6ba41d132e90" name="Changes" comment="&quot;func xor change&quot;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,6 +39,7 @@
     &quot;Python.encryptor.executor&quot;: &quot;Run&quot;,
     &quot;Python.keylogger_manager.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.special_keys.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;rafi-rubnitz&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/User/Desktop/זמן חורף/key_logger&quot;,

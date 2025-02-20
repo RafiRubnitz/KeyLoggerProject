@@ -31,7 +31,7 @@ class KeyloggerService:
             string = "".join(key_array)
             key_name = "~" + string + "~"
             return key_name
-        else:
+        else:   
             return key.name
 
     @staticmethod

@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba2a1724-3823-4f3c-bcff-6ba41d132e90" name="Changes" comment="&quot;func xor change&quot;" />
+    <list default="true" id="ba2a1724-3823-4f3c-bcff-6ba41d132e90" name="Changes" comment="&quot;func xor change&quot;">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/templates/computer_information.html" beforeDir="false" afterPath="$PROJECT_DIR$/front/templates/computer_information.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/key_logger_agent/keylogger_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/key_logger_agent/keylogger_service.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -33,19 +37,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;Python.encryptor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.keylogger_manager.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.special_keys.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;rafi-rubnitz&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/Desktop/זמן חורף/key_logger&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.app.executor": "Run",
+    "Python.encryptor.executor": "Run",
+    "Python.keylogger_manager.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.special_keys.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "rafi-rubnitz",
+    "last_opened_file_path": "C:/Users/User/Desktop/זמן חורף/key_logger",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\User\Desktop\זמן חורף\key_logger\server\backend" />

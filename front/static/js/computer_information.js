@@ -8,7 +8,7 @@ function process_data(data) {
     keys.forEach(key=> {
         const header = document.createElement("h2");
         header.textContent = key;
-        document.body.appendChild(header);
+        document.getElementById("output").appendChild(header);
 
 
         data.forEach(obj=> {
@@ -17,11 +17,11 @@ function process_data(data) {
                 Object.entries(obj[key]).forEach(([time_line,value]) => {
                     const h4 = document.createElement("h4");
                     h4.textContent = time_line
-                    document.body.appendChild(h4)
+                    document.getElementById("output").appendChild(h4)
             
                     const text = document.createElement("p");
                     text.textContent = value
-                    document.body.appendChild(text)
+                    document.getElementById("output").appendChild(text)
                 })
             };
         });

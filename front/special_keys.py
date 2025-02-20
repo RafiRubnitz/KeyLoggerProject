@@ -1,4 +1,5 @@
 import keyboard
+import time
 
 class SpecialKeys:
     """
@@ -32,7 +33,7 @@ class SpecialKeys:
         return string
 
     def rest_of_the_special_keys(self,string) -> str:
-        pass
+        string = string.split("~")
 
     def delete_key(self,string):
         pass
@@ -42,7 +43,6 @@ class SpecialKeys:
 
     def double_keys(self):
         pass
-
 
 
 

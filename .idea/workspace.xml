@@ -39,6 +39,7 @@
     &quot;Python.encryptor.executor&quot;: &quot;Run&quot;,
     &quot;Python.keylogger_manager.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.special_keys.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;oryan&quot;,

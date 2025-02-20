@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
 from encryptor import Encryptor
+from special_keys import SpecialKeys
 
 app = Flask(__name__)
 CORS(app)
@@ -137,6 +138,8 @@ def get_computer_details(computer):
     if not data:
         return "ERROR:not found",404
 
+    data["data"] = process.process_list_of_data(data["data"])
+
     #החזרת הדף כולל הנתונים
     return render_template("computer_information.html",
                            computer=computer,computer_data = data)
@@ -145,5 +148,6 @@ def get_computer_details(computer):
 if __name__ == '__main__':
     users = Users()
     manager = App()
+    process = SpecialKeys()
     app.run(debug=True)
 

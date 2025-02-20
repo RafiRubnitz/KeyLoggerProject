@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/computer_information.css">
+    <script src="/static/js/computer_information.js"></script>
+
     <title>{{ computer }}</title>
 </head>
 <body>
     <h1>פרטים על {{ computer }}</h1>
     <p>מידע נוסף על {{ computer }} יוצג כאן.</p>
-    <p>{{computer_data.data}}</p>
+    <p>{{computer_data.location}} :מיקום</p>
+    <!-- <p>{{computer_data.data}}</p> -->
+
+    <script>    
+
+        const data = {{computer_data|tojson|safe}};
+
+        process_data(data["data"])
+        
+    </script>
+    
 </body>
 </html>

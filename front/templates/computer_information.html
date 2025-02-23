@@ -12,6 +12,10 @@
     <h1>פרטים על {{ computer }}</h1>
     <p>מידע נוסף על {{ computer }} יוצג כאן.</p>
     <p>{{computer_data.location}} :מיקום</p>
+
+    <div class="search">
+        <input type="search" id="searchBox" placeholder="...חפש כאן">
+    </div>
     <!-- <p>{{computer_data.data}}</p> -->
 
     <div class="output" id="output"></div>
@@ -21,12 +25,8 @@
     <script>    
 
         const data = {{computer_data|tojson|safe}};
-<<<<<<< HEAD
-        console.log(data)
-=======
         const links = {{data_list|tojson|safe}};
 
->>>>>>> main
         process_data(data["data"])
         make_link_list(links["links"])
     </script>

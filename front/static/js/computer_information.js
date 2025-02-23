@@ -81,3 +81,7 @@ function make_link_list(link_list) {
         container.appendChild(a)
     })
 }
+
+document.getElementById("searchBox").addEventListener("input" ,function(){
+    let filter = this.value.toLowerCase();
+})

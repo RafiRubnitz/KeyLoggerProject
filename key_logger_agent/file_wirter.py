@@ -1,4 +1,4 @@
-from writer import Iwriter
+from writer import IWriter
 import json
 
 class FileWriter(Iwriter):

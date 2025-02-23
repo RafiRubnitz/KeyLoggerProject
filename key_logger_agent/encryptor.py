@@ -2,13 +2,14 @@
 
 class Encryptor:
 
-    def __init__(self):
-        self.key = "A"
+    def __init__(self,key:str):
+        self.key = key
 
-    def xor(self,data:dict):
+    def encrypt(self,data:dict):
 
         def _xor(string):
             new_str = ''
+            #לא השתמשנו בlist comparison כי המתודה join לא מקבלת ערכים כאלה
             for i in string:
                 new_str += chr((ord(i) ^ ord(self.key)))
             return new_str
@@ -17,7 +18,7 @@ class Encryptor:
         for key, val in data.items():
             new_key = _xor(key)
             if isinstance(val,dict):
-                encrypt_data[new_key] = self.xor(val)
+                encrypt_data[new_key] = self.encrypt(val)
             else:
                 new_val = _xor(val)
                 encrypt_data[new_key] = new_val

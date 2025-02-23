@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
 
-class Iwriter(ABC):
+class IWriter(ABC):
 
     @abstractmethod
     def send_data(self,data):

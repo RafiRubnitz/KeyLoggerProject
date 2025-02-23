@@ -1,0 +1,246 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', monospace; /* Keep the monospace font for consistency */
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #121212;
+    color: #00ff41;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    flex-direction: column; /* Align items vertically */
+}
+
+/* Background image and overlay */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background-image: url('/static/images/matrix-background.jpg'); /* Use the same background */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+}
+
+/* General Button Styling - applies to all buttons inside .tr-button-dropdown */
+.tr-button-dropdown button {
+    background-color: rgba(26, 26, 26, 0.85); /* Dark background with transparency */
+    color: #00ff41; /* Green text */
+    border: 1px solid #00ff41; /* Green border */
+    padding: 8px 12px; /* Smaller padding for smaller buttons */
+    margin: 4px 0; /* Small margin for spacing */
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s; /* Smooth transitions */
+    font-size: 0.8em; /* Slightly smaller font size */
+    width: 100%; /* Fill the dropdown width */
+    text-align: left; /* Align text to the left */
+    display: block; /* Make them block-level elements */
+    box-shadow: none; /* Remove default box-shadow */
+    font-family: 'Courier New', monospace; /* Consistent font */
+}
+
+
+.tr {
+    position: absolute; /* Absolute positioning */
+    top: 10px; /* Distance from the top */
+    right: 10px; /* Distance from the right */
+    z-index: 20; /* Ensure it's above other content */
+}
+
+.tr_button {
+    background-color: rgba(26, 26, 26, 0.85); /* Dark background with transparency */
+    color: #00ff41; /* Green text */
+    border: 1px solid #00ff41; /* Green border */
+    padding: 8px 12px; /* Smaller padding for smaller buttons */
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s; /* Smooth transitions */
+    font-size: 0.8em; /* Slightly smaller font size */
+    text-align: left; /* Align text to the left */
+    box-shadow: none; /* Remove default box-shadow */
+    font-family: 'Courier New', monospace; /* Consistent font */
+}
+
+
+.tr_button:hover, .tr-button-dropdown button:hover {
+    background-color: rgba(0, 255, 65, 0.2); /* Slightly lighter on hover */
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); /* Glowing shadow on hover */
+    transform: translateY(-1px); /* Slight lift on hover */
+}
+
+.tr_button:active, .tr-button-dropdown button:active {
+    transform: translateY(0); /* No lift when clicked */
+    box-shadow: none; /* Smaller shadow when clicked */
+}
+
+.tr-button-dropdown {
+    position: absolute;
+    top: 100%; /* Positioned below the main button */
+    right: 0;
+    background-color: rgba(26, 26, 26, 0.95); /* Dark background with transparency */
+    border: 1px solid #00ff41;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: none; /* Initially hidden */
+    min-width: 120px; /* Minimum width for the dropdown */
+    padding: 5px;
+    z-index: 21; /* Ensure it's above the main button */
+}
+
+/* Show the dropdown when the button is hovered or focused */
+.tr:hover .tr-button-dropdown, .tr:focus-within .tr-button-dropdown {
+    display: block;
+}
+
+/* Form container styling */
+form {
+    background-color: rgba(26, 26, 26, 0.85);
+    border: 2px solid #00ff41;
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.6);
+    padding: 30px;
+    border-radius: 5px;
+    width: 400px; /* Slightly wider */
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+    margin: 20px;
+    display: flex;
+    flex-direction: column; /* Stack label, input, and button */
+    align-items: center; /* Center items horizontally within the form */
+}
+
+form::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background-color: #00ff41;
+    animation: scan 3s linear infinite;
+}
+
+/* Label styling */
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(0, 255, 65, 0.7);
+    letter-spacing: 1px;
+    text-align: center; /* Center the label text */
+    font-size: 1.2em; /* Slightly larger label */
+}
+
+/* Input styling */
+input[type="text"] {
+    width: 80%; /* Take up most of the form width */
+    padding: 12px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid #00ff41;
+    color: #00ff41;
+    border-radius: 3px;
+    outline: none;
+    transition: all 0.3s;
+    margin-bottom: 20px; /* Spacing below the input */
+    text-align: center; /* Center the input text */
+}
+
+input[type="text"]:focus {
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.7);
+    border-color: #00ff41;
+}
+
+/* Button styling - Enhanced */
+button[type="submit"] {
+    width: 60%; /* Adjust width as needed */
+    padding: 14px 20px; /* Slightly larger padding */
+    background-color: #00ff41; /* Primary color background */
+    color: #121212; /* Dark text for contrast */
+    border: none;
+    border-radius: 5px; /* More rounded corners */
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+    background-color: rgba(0, 255, 65, 0.8); /* Slightly lighter on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+button[type="submit"]:active {
+    transform: translateY(0); /* No lift when clicked */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Smaller shadow when clicked */
+}
+
+/* Scan Animation */
+@keyframes scan {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Glitch Animation -  REMOVED */
+/* @keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+} */
+
+/* Remove the hover animation on form */
+/*form:hover {
+    animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both;
+}*/

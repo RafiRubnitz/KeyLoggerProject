@@ -16,12 +16,19 @@
 
     <div class="output" id="output"></div>
 
+    <div id="link_list_div"></div>
+
     <script>    
 
         const data = {{computer_data|tojson|safe}};
+<<<<<<< HEAD
         console.log(data)
+=======
+        const links = {{data_list|tojson|safe}};
+
+>>>>>>> main
         process_data(data["data"])
-        
+        make_link_list(links["links"])
     </script>
     
 </body>

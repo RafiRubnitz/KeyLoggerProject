@@ -49,6 +49,77 @@ body::after {
     z-index: -1;
 }
 
+/* General Button Styling - applies to all buttons inside .tr-button-dropdown */
+.tr-button-dropdown button {
+    background-color: rgba(26, 26, 26, 0.85); /* Dark background with transparency */
+    color: #00ff41; /* Green text */
+    border: 1px solid #00ff41; /* Green border */
+    padding: 8px 12px; /* Smaller padding for smaller buttons */
+    margin: 4px 0; /* Small margin for spacing */
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s; /* Smooth transitions */
+    font-size: 0.8em; /* Slightly smaller font size */
+    width: 100%; /* Fill the dropdown width */
+    text-align: left; /* Align text to the left */
+    display: block; /* Make them block-level elements */
+    box-shadow: none; /* Remove default box-shadow */
+    font-family: 'Courier New', monospace; /* Consistent font */
+}
+
+
+.tr {
+    position: absolute; /* Absolute positioning */
+    top: 10px; /* Distance from the top */
+    right: 10px; /* Distance from the right */
+    z-index: 20; /* Ensure it's above other content */
+}
+
+.tr_button {
+    background-color: rgba(26, 26, 26, 0.85); /* Dark background with transparency */
+    color: #00ff41; /* Green text */
+    border: 1px solid #00ff41; /* Green border */
+    padding: 8px 12px; /* Smaller padding for smaller buttons */
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s; /* Smooth transitions */
+    font-size: 0.8em; /* Slightly smaller font size */
+    text-align: left; /* Align text to the left */
+    box-shadow: none; /* Remove default box-shadow */
+    font-family: 'Courier New', monospace; /* Consistent font */
+}
+
+
+.tr_button:hover, .tr-button-dropdown button:hover {
+    background-color: rgba(0, 255, 65, 0.2); /* Slightly lighter on hover */
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); /* Glowing shadow on hover */
+    transform: translateY(-1px); /* Slight lift on hover */
+}
+
+.tr_button:active, .tr-button-dropdown button:active {
+    transform: translateY(0); /* No lift when clicked */
+    box-shadow: none; /* Smaller shadow when clicked */
+}
+
+.tr-button-dropdown {
+    position: absolute;
+    top: 100%; /* Positioned below the main button */
+    right: 0;
+    background-color: rgba(26, 26, 26, 0.95); /* Dark background with transparency */
+    border: 1px solid #00ff41;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: none; /* Initially hidden */
+    min-width: 120px; /* Minimum width for the dropdown */
+    padding: 5px;
+    z-index: 21; /* Ensure it's above the main button */
+}
+
+/* Show the dropdown when the button is hovered or focused */
+.tr:hover .tr-button-dropdown, .tr:focus-within .tr-button-dropdown {
+    display: block;
+}
+
 /* Form container styling */
 form {
     background-color: rgba(26, 26, 26, 0.85);

@@ -1,5 +1,5 @@
 # תיקיות קומפילציה של פייתון
-__pycache__/
+**/__pycache__/
 *.pyc
 *.pyo
 
@@ -12,3 +12,6 @@ venv/
 
 #data
 server/backend/data/
+
+#.idea
+**/.idea/

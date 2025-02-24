@@ -1,6 +1,219 @@
-.output {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #111; /* רקע שחור כהה יותר */
+    color: #00ff00;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* מניעת גלילה אופקית */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px; /* רוחב מקסימלי לקונטיינר */
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3); /* צל עדין לקונטיינר */
+    border-radius: 10px; /* פינות מעוגלות */
+}
+
+#header {
+    text-align: center; /* מרכוז תוכן בתוך ה-header */
+    margin-bottom: 20px; /* הוספת מרווח מתחת ל-header */
+}
+
+h1#main-title {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #00ff00;
+    animation: glitch 2s infinite; /* אפקט גליץ' */
+}
+
+@keyframes glitch {
+    0% { text-shadow: 0 0 10px #00ff00; }
+    25% { text-shadow: -2px 2px 5px #00ff00; }
+    50% { text-shadow: 2px -2px 5px #00ff00; }
+    75% { text-shadow: -2px -2px 5px #00ff00; }
+    100% { text-shadow: 0 0 10px #00ff00; }
+}
+
+p#additional-info {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+p#location {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+p#location span {
+    font-weight: bold;
+    color: #fff;
+}
+
+button#stop-computer {
+    background-color: rgba(255, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px 15px;
+    border: 2px solid #ff0000; /* הוספת גבול אדום */
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.9em;
+    transition: background-color 0.3s, transform 0.2s, border-color 0.3s; /* הוספת מעבר גבול */
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin: 0;
+}
+
+button#stop-computer:hover {
+    background-color: rgba(200, 0, 0, 1);
+    transform: scale(1.05);
+    border-color: #cc0000; /* שינוי צבע גבול במעבר עכבר */
+}
+
+div.output {
+    margin-top: 30px;
+    padding: 15px;
+    border: 1px dashed #00ff00;
+    border-radius: 5px;
+    text-align: left; /* יישור לשמאל בתוך ה-output */
+}
+
+div.output h2 {
+    color: #00ff00;
+    cursor: pointer;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-bottom: 2px dashed #00ff00;
+    transition: background-color 0.3s;
+    font-size: 1.3em;
+}
+
+div.output h2:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+}
+
+div.output h4 {
+    color: #00ff00;
+    cursor: pointer;
+    margin-left: 20px;
+    padding: 8px;
+    border-bottom: 1px dotted #00ff00;
+    transition: background-color 0.3s;
+    font-size: 1.1em;
+}
+
+div.output h4:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+}
+
+div.output p {
+    margin-left: 40px;
+    padding: 8px;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+div#link_list_div {
+    margin-top: 30px;
+    padding: 15px;
+    border: 1px dashed #00ff00;
+    border-radius: 5px;
+    text-align: left; /* יישור לשמאל בתוך ה-link_list_div */
+}
+
+div#link_list_div a {
+    color: #00ff00;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px; /* מרווח קטן יותר */
+    transition: color 0.3s, transform 0.2s; /* הוספת מעבר חלק ושינוי צורה */
+    padding: 5px; /* ריפוד קטן יותר */
+    border-radius: 5px;
+    font-size: 0.8em; /* גודל גופן קטן יותר */
+}
+
+div#link_list_div a:hover {
+    color: #fff;
+    text-decoration: none;
+    background-color: rgba(0, 255, 0, 0.2); /* הדגשה במעבר עכבר */
+    transform: translateX(5px); /* הזזה קלה */
+}
+
+/* אפקטים נוספים */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.imgur.com/JTXA45D.gif'); /* החלף בכתובת ה-GIF הרצויה */
+    opacity: 0.1;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* הוספת שורות קוד מרצדות */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0), rgba(0,0,0,0.1) 1px, rgba(0,255,0,0.1) 2px);
+    z-index: -1;
+    pointer-events: none;
+    animation: scanlines 5s linear infinite;
+}
+
+@keyframes scanlines {
+    0% { background-position: 0 -100px; }
+    100% { background-position: 0 100px; }
+}
+
+
+
+
+
+
+
+
+#search-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex; /* שימוש ב-flexbox ליישור אופקי */
+    align-items: center; /* יישור אנכי למרכז */
+}
+
+#search-input {
+    padding: 6px;
+    font-size: 0.8em;
+    border: 1px solid #00ff00;
+    background-color: #000;
+    color: #00ff00;
+    border-radius: 5px;
+    margin-right: 5px; /* מרווח בין תיבת הטקסט לכפתור */
+    width: 120px;
+}
+
+#search-button, #reset-button {
+    background-color: rgba(0, 255, 0, 0.8);
+    color: #000;
+    padding: 6px 10px; /* הקטנת הריפוד */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    font-size: 0.8em; /* הקטנת גודל הגופן */
+    margin-right: 5px;
+}
+
+#search-button:hover {
+    background-color: rgba(0, 200, 0, 1);
 }

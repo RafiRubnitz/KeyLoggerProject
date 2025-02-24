@@ -9,15 +9,19 @@
     <title>{{ computer }}</title>
 </head>
 <body>
+    <div id="header">
     <h1>פרטים על {{ computer }}</h1>
     <p>מידע נוסף על {{ computer }} יוצג כאן.</p>
     <p>{{computer_data.location}} :מיקום</p>
+    </div>
 
-    <button onclick="stop_computer()">stop</button>
+    <button onclick="stop_computer()" id="stop-computer">stop</button>
 
-    <!-- <div class="search">
-        <input type="search" id="searchBox" placeholder="...חפש כאן">
-    </div> -->
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="חפש כאן...">
+        <button id="search-button">חפש</button>
+        <button id="reset-button">איפוס</button>
+    </div>
 
     <div class="output" id="output"></div>
 
@@ -31,6 +35,11 @@
 
         process_data(data["data"])
         make_link_list(links["links"])
+
+        // הוספת event listener לכפתור החיפוש
+        window.originalOutput = document.getElementById("output").innerHTML;
+        document.getElementById('search-button').addEventListener('click', searchData);
+        document.getElementById("reset-button").addEventListener("click",resetSearch);
     </script>
     
 </body>

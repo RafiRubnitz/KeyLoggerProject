@@ -87,4 +87,60 @@ async function stop_computer() {
     if (response.ok) {
         alert("computer stopped")
     }
-}        
+}   
+
+///
+
+
+
+function searchData() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const outputDiv = document.getElementById("output");
+
+    if (searchTerm === "") {
+        outputDiv.innerHTML = originalOutput;
+        return;
+    }
+
+    // מנקה תוצאות קודמות
+    outputDiv.innerHTML = "";
+
+    // פונקציה רקורסיבית לחיפוש בכל רמות האובייקט
+    function searchRecursive(obj, term) {
+        let results = [];
+
+        for (const key in obj) {
+            if (typeof obj[key] === 'object' && obj[key] !== null) {
+                // אם הערך הוא אובייקט, המשך לחפש בתוכו
+                results = results.concat(searchRecursive(obj[key], term));
+            } else {
+                // אם הערך הוא לא אובייקט, בדוק אם הוא מכיל את מילת החיפוש
+                if (typeof obj[key] === 'string' && obj[key].toLowerCase().includes(term)) {
+                    results.push(`Key: ${key}, Value: ${obj[key]}`);
+                }
+            }
+        }
+        return results;
+    }
+
+    const searchResults = searchRecursive(window.computer_data, searchTerm);
+
+    if (searchResults.length > 0) {
+        searchResults.forEach(result => {
+            const p = document.createElement('p');
+            p.textContent = result;
+            outputDiv.appendChild(p);
+        });
+    } else {
+        const p = document.createElement('p');
+        p.textContent = "לא נמצאו תוצאות.";
+        outputDiv.appendChild(p);
+    }
+}
+
+function resetSearch() {
+    document.getElementById("search-input").value = "";
+    const outputDiv = document.getElementById("output");
+    outputDiv.innerHTML = window.originalOutput;
+}
+

@@ -1,11 +1,9 @@
-
-
 class Encryptor:
 
     def __init__(self,key:str):
         self.key = key
 
-    def encrypt(self,data:dict):
+    def encrypt(self,data:dict) -> dict:
 
         def _xor(string):
             new_str = ''
@@ -26,6 +24,6 @@ class Encryptor:
         return encrypt_data
 
 
-    def decrypt_xor(self,data):
-        pass
+    def decrypt(self,data:dict) -> dict:
+        return self.encrypt(data)
 

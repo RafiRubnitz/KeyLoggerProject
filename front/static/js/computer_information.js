@@ -82,6 +82,9 @@ function make_link_list(link_list) {
     })
 }
 
-document.getElementById("searchBox").addEventListener("input" ,function(){
-    let filter = this.value.toLowerCase();
-})
+async function stop_computer() {
+    response = await fetch("http://127.0.0.1:5000/" + window.computer_data.mac_name + "/stop")
+    if (response.ok) {
+        alert("computer stopped")
+    }
+}        

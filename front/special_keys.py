@@ -40,7 +40,6 @@ class SpecialKeys:
         return string
 
     def rest_of_the_special_keys(self,string) -> str:
-        print(string)
         string = string.split("~")
         new_string = ""
         for word in string:

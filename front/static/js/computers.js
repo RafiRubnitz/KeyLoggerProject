@@ -8,7 +8,6 @@ async function get_computer_list() {
         alert("somthing wrong")
     }
     data = await response.json()
-    console.log("data recived:" , data)
     try {
         let list_of_computer = data["list_of_computer"]
         add_to_datalist(list_of_computer)
@@ -21,7 +20,6 @@ async function get_computer_list() {
 async function add_to_datalist(list_of_computer) {
     let computer_datalist = document.getElementById("computer_datalist")
     computer_datalist.innerHTML = ""
-    console.log(list_of_computer)
     list_of_computer.forEach(computer => {
         let option = document.createElement("option");
         option.value = computer;

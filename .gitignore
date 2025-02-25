@@ -16,6 +16,10 @@ server/backend/data/
 
 #.idea
 **/.idea/
+.idea/
 
 #config
 config.json
+
+#dist
+key_logger_agent/dist/

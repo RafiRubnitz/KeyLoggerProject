@@ -80,7 +80,7 @@ function make_link_list(link_list) {
 }
 
 async function stop_computer() {
-    response = await fetch("http://127.0.0.1:5000/computers/" + window.computer_data.mac_name + "/stop")
+    response = await fetch("{{ url_for('computers/' + window.computer_data.mac_name + '/stop')}}")
     if (response.ok) {
         alert("computer stopped")
     }

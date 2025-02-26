@@ -223,6 +223,9 @@ button[type="submit"]:active {
     text-shadow: 0 0 8px rgba(223, 19, 19, 0.7);
 }
 
+#A {
+    display: none;
+}
 /* Glitch Animation -  REMOVED */
 /* @keyframes glitch {
     0% {

@@ -19,7 +19,7 @@ server/backend/data/
 .idea/
 
 #config
-keys.json
+config.json
 
 #dist
 key_logger_agent/dist/

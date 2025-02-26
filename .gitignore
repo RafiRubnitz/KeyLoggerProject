@@ -1,0 +1,25 @@
+# תיקיות קומפילציה של פייתון
+**/__pycache__/
+*.pyc
+*.pyo
+
+# קובצי סביבה וירטואלית
+venv/
+.env
+.vscode/
+
+# קבצי לוג
+*.log
+
+#data
+server/backend/data/
+
+#.idea
+**/.idea/
+.idea/
+
+#config
+config.json
+
+#dist
+key_logger_agent/dist/

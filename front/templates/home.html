@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/front/static/css/home.css">
-    <script src="/front/static/css/home.css"></script>
+    <link rel="stylesheet" href="/static/css/home.css">
+    <script src="/static/js/home.js"></script>
 </head>
 <body>
 
     <div class="welcome-text">Welcome to Keylogger Project</div>
+
+
 
     <form action="http://127.0.0.1:5000/user_verification" method="post" class="loggin">
 
@@ -22,10 +24,30 @@
         <input type="text" id="password" name="password">
 
         <br><br>
+        <label id="error-message"></label>
 
         <button type="submit">enter</button>
 
     </form>
+
+    <script>
+        try {
+            const message = JSON.parse('{{message|default({})|tojson|safe}}');
+            if (message){
+                if ("user_name" in message){
+                    document.getElementById("error-message").textContent = "ERROR: user name " + message.user_name
+                }
+                else if ("password" in message){
+                    document.getElementById("error-message").textContent = "ERROR: password " + message.password
+                }
+                else {
+
+                }
+            }
+        }  catch(error) {
+            console.error(error)
+        }
+    </script>
 
 </body>
 </html>

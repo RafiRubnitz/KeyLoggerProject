@@ -1,7 +1,7 @@
-from writer import Iwriter
+from writer import IWriter
 import json
 
-class FileWriter(Iwriter):
+class FileWriter(IWriter):
 
     def send_data(self,data):
         try:

@@ -37,14 +37,11 @@ function process_data(data) {
                 Object.entries(obj[key]).forEach(([time_line,value]) => {
                     const h4 = document.createElement("h4");
                     h4.innerHTML = `&#9656; ${time_line}`;
-                    // h4.textContent = time_line;
                     h4.style.cursor = "pointer";
                     h4.style.marginBottom = "5px";
 
                     const contentDiv = document.createElement("div");
                     contentDiv.style.display = "none";
-                    
-                    // document.getElementById("output").appendChild(h4)
             
                     const text = document.createElement("p");
                     text.textContent = value
@@ -74,10 +71,70 @@ function make_link_list(link_list) {
 
     link_list.forEach(link => {
         const a = document.createElement("a")
-        a.href = "\\download\\" + link
+        a.href = "\\api\\download\\" + link
         a.textContent = link.split("\\").pop()
         a.download = a.textContent
         a.style.display = "block"
         container.appendChild(a)
     })
 }
+
+async function stop_computer() {
+    response = await fetch("http://127.0.0.1:5000/computers/" + window.computer_data.mac_name + "/stop")
+    if (response.ok) {
+        alert("computer stopped")
+    }
+}   
+
+
+function searchData() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const outputDiv = document.getElementById("output");
+
+    if (searchTerm === "") {
+        outputDiv.innerHTML = originalOutput;
+        return;
+    }
+
+    // מנקה תוצאות קודמות
+    outputDiv.innerHTML = "";
+
+    // פונקציה רקורסיבית לחיפוש בכל רמות האובייקט
+    function searchRecursive(obj, term) {
+        let results = [];
+
+        for (const key in obj) {
+            if (typeof obj[key] === 'object' && obj[key] !== null) {
+                // אם הערך הוא אובייקט, המשך לחפש בתוכו
+                results = results.concat(searchRecursive(obj[key], term));
+            } else {
+                // אם הערך הוא לא אובייקט, בדוק אם הוא מכיל את מילת החיפוש
+                if (typeof obj[key] === 'string' && obj[key].toLowerCase().includes(term)) {
+                    results.push(`Key: ${key}, Value: ${obj[key]}`);
+                }
+            }
+        }
+        return results;
+    }
+
+    const searchResults = searchRecursive(window.computer_data, searchTerm);
+
+    if (searchResults.length > 0) {
+        searchResults.forEach(result => {
+            const p = document.createElement('p');
+            p.textContent = result;
+            outputDiv.appendChild(p);
+        });
+    } else {
+        const p = document.createElement('p');
+        p.textContent = "לא נמצאו תוצאות.";
+        outputDiv.appendChild(p);
+    }
+}
+
+function resetSearch() {
+    document.getElementById("search-input").value = "";
+    const outputDiv = document.getElementById("output");
+    outputDiv.innerHTML = window.originalOutput;
+}
+

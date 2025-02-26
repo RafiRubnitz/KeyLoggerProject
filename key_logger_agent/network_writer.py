@@ -1,17 +1,28 @@
-from writer import Iwriter
+from writer import IWriter
 import requests
 
-class NetworkWriter(Iwriter):
+class NetworkWriter(IWriter):
 
-    def __init__(self):
-        self.urls = ["http://127.0.0.1:5000/api/upload"]
+    def __init__(self,host:str):
+        self.host = host
 
-    def send_data(self,data) -> bool:
-        response = requests.post(self.urls[0],json=data)
+    def send_data(self,data:dict) -> str:
         try:
-            response = response.json()
-            if response["message"] == "stop":
-                return True
-            return False
-        except:
-            return False
+            #שליחת המידע לשרת
+            response = requests.post(self.host + "/api/upload",json=data,timeout=5)
+            #קבלת תשובה
+            response_json = response.json()
+
+            #בדיקה האם להפסיק
+            if response_json["message"] == "stop":
+                return "stop"
+            #בדיקה האם להמשיך
+            elif response_json["message"] == "success":
+                return "continue"
+            #בדיקה האם הייתה שגיאה
+            else:
+                return "error"
+        #אם קרתה שגיאה
+        except Exception as e:
+            print(e)
+            return "error"

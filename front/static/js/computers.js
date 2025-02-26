@@ -1,11 +1,14 @@
 window.onload = get_computer_list()
 
 async function get_computer_list() {
-    response = await fetch("http://127.0.0.1:5000/api/get_computers_list",{
+
+    response = await fetch(window.url.get,{
         method : "get",
     });
     if (!response.ok) {
-        alert("somthing wrong")
+        setTimeout(() => {
+            alert("somthing wrong")
+        }, 500);
     }
     data = await response.json()
     try {
@@ -13,7 +16,9 @@ async function get_computer_list() {
         add_to_datalist(list_of_computer)
     }
     catch(error){
-        alert(error)    
+        setTimeout(() => {
+            alert(error)
+        }, 500);    
     }   
 }
 

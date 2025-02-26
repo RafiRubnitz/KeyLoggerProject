@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/computers.css">
-    <script src="/static/js/computers.js"></script>
     <title>computers</title>
 </head>
 
@@ -20,7 +19,7 @@
     </div>
     
 
-    <form action="http://127.0.0.1:5000/api/computers/" id="computer">
+    <form action="{{ url_for('get_computer_details',computer="")}}" id="computer">
 
         <label for="computer">computer list</label>
         <input list="computer_datalist" id="computerName" type="text">
@@ -31,15 +30,22 @@
     </form>
 
     <script>
+        
         try {
+            let error_message = document.getElementById("error-message");
+            error_message.innerHTML = ""
             const message = JSON.parse('{{message|default({})|tojson|safe}}');
             if ("404" in message) {
-                document.getElementById("error-message").textContent = message["404"]
+                error_message.textContent = message["404"]
             }
         } catch(error) {
             console.log(error)
         }
     </script>
+
+    <script>window.url = {get : "{{url_for('get_computers_list')}}"}</script>
+
+    <script src="/static/js/computers.js"></script>
 
 </body>
 </html>

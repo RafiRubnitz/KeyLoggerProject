@@ -24,24 +24,28 @@
         <input type="text" id="password" name="password">
 
         <br><br>
+        <label id="error-message"></label>
 
         <button type="submit">enter</button>
 
     </form>
 
     <script>
-        const error = {{message|tojson|default("null")}}
-        if (error){
-            if ("user_name" in error){
-                setTimeout(() => {
-                    alert("ERROR: user name " + error.user_name)
-                }, 500);
+        try {
+            const message = JSON.parse('{{message|default({})|tojson|safe}}');
+            if (message){
+                if ("user_name" in message){
+                    document.getElementById("error-message").textContent = "ERROR: user name " + message.user_name
+                }
+                else if ("password" in message){
+                    document.getElementById("error-message").textContent = "ERROR: password " + message.password
+                }
+                else {
+
+                }
             }
-            else {
-                setTimeout(() => {
-                    alert("ERROR: password " + error.password)
-                }, 500);
-            }
+        }  catch(error) {
+            console.error(error)
         }
     </script>
 

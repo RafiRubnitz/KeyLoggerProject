@@ -174,7 +174,7 @@ def get_computer_details(computer):
 
     #בדיקה שקיבל מידע
     if not data:
-        return "ERROR:not found",404
+        return render_template("computers.html",message={"404" : f"{computer} not found"})
 
     #עיבוד הנתונים לפני הצגה
     data["data"] = process.process_list_of_data(data["data"])

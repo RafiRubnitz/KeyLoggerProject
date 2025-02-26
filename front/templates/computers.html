@@ -25,9 +25,21 @@
         <label for="computer">computer list</label>
         <input list="computer_datalist" id="computerName" type="text">
         <datalist id="computer_datalist"></datalist>
+        <label id="error-message"></label>
         <button type="submit" id="search" onclick="go_to_computer_html()">search</button>
 
     </form>
+
+    <script>
+        try {
+            const message = JSON.parse('{{message|default({})|tojson|safe}}');
+            if ("404" in message) {
+                document.getElementById("error-message").textContent = message["404"]
+            }
+        } catch(error) {
+            console.log(error)
+        }
+    </script>
 
 </body>
 </html>

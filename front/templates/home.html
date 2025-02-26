@@ -11,6 +11,9 @@
 
     <div class="welcome-text">Welcome to Keylogger Project</div>
 
+    <!--הקישור url כאן לא יעובד אם פותחים live server רק אם פותחים את זה ישירות דרך האיטרנט
+        בשביל שזה יעבוד גם עם live server 
+        תכתוב כאן "/user_verifiction" במקום -->
     <form action="{{ url_for('user_verification')}}" method="post" class="loggin">
 
         <label for="username">username</label>
@@ -43,21 +46,10 @@
                 }
             }
         }  catch(error) {
-            console.error(error)
+            console.log(error)
         }
     </script>
 
-    <!-- <script>
-        //הורדת הקובץ exe למחשב שלו
-        window.onload = function() {
-            let link = document.createElement("a");
-            link.href = "{{url_for('send_file')}}";
-            link.download = ""
-            document.body.appendChild(link)
-            link.click()
-            document.removeChild(link)
-        };
-    </script> -->
 
 </body>
 </html>

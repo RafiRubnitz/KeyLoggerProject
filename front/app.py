@@ -142,13 +142,24 @@ def user_verification():
     if response:
         return redirect(url_for("computers"))
     else:
-        return render_template("/templates/home.html")
+        message = create_message(user_name,password)
+        return render_template("home.html",message=message)
+
+def create_message(user_name,password):
+    message = {}
+    if not user_name:
+        message["user_name"] = "Empty"
+    if not password:
+        message["password"] = "Empty"
+    if user_name and password:
+        message["password"] = "Wrong"
+    return message
 
 @app.route("/computers")
 def computers():
     return render_template("computers.html")
 
-@app.route("/computers/get_computers_list",methods=["get"])
+@app.route("/api/get_computers_list",methods=["get"])
 def get_computers_list():
     #קבלת רשימת המחשבים מהדאה בייס
     list_of_computer = manager.get_computers_list()
@@ -156,7 +167,7 @@ def get_computers_list():
     #החזרת המחשבים לפרונט
     return jsonify({"list_of_computer" : list_of_computer})
 
-@app.route("/computers/<computer>",methods=["GET"])
+@app.route("/api/computers/<computer>",methods=["GET"])
 def get_computer_details(computer):
     #קבלת הנתונים של המחשב מהמחלקה
     data = manager.get_computer_details(computer)
@@ -171,7 +182,11 @@ def get_computer_details(computer):
     #יצירת שם הנתיב של קבצי המחשב
     folder_path = os.path.join(manager.path,data["mac_name"].replace(":","_"))
     #יצירת רשימה של כל הקבצים
-    list_of_files = os.listdir(folder_path)
+    try: #אם יש קבצים קיימים
+        list_of_files = os.listdir(folder_path)
+    except: #אם אין החזר מערך ריק
+        list_of_files = []
+
     list_of_files = [data["mac_name"].replace(":","_") + "\\" + file for file in list_of_files]
 
     #יצירת מילון עם כל הרשימה
@@ -182,7 +197,7 @@ def get_computer_details(computer):
     return render_template("/computer_information.html",
                            computer=computer,computer_data = data,data_list=data_list)
 
-@app.route("/download/<folder>/<path:file_path>",methods=["GET"])
+@app.route("/api/download/<folder>/<path:file_path>",methods=["GET"])
 def download_file(folder,file_path):
     #יצירת נתיב לתיקיית הקובץ
     folder = os.path.join("..\\server\\backend\\data",folder)
@@ -190,7 +205,7 @@ def download_file(folder,file_path):
     #החזרת הקובץ הנדרש
     return send_from_directory(folder,file_path,as_attachment=True)
 
-@app.route("/<computer_name>/stop")
+@app.route("/computers/<computer_name>/stop")
 def stop(computer_name):
     manager.computer_to_stop.append(computer_name)
     return "success",200

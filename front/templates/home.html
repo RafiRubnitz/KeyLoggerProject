@@ -11,6 +11,8 @@
 
     <div class="welcome-text">Welcome to Keylogger Project</div>
 
+
+
     <form action="http://127.0.0.1:5000/user_verification" method="post" class="loggin">
 
         <label for="username">username</label>
@@ -26,6 +28,22 @@
         <button type="submit">enter</button>
 
     </form>
+
+    <script>
+        const error = {{message|tojson|default("null")}}
+        if (error){
+            if ("user_name" in error){
+                setTimeout(() => {
+                    alert("ERROR: user name " + error.user_name)
+                }, 500);
+            }
+            else {
+                setTimeout(() => {
+                    alert("ERROR: password " + error.password)
+                }, 500);
+            }
+        }
+    </script>
 
 </body>
 </html>

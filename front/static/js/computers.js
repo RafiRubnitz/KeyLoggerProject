@@ -1,7 +1,7 @@
 window.onload = get_computer_list()
 
 async function get_computer_list() {
-    response = await fetch("http://127.0.0.1:5000/computers/get_computers_list",{
+    response = await fetch("http://127.0.0.1:5000/api/get_computers_list",{
         method : "get",
     });
     if (!response.ok) {
